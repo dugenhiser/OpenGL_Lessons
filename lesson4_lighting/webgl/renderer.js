@@ -62,13 +62,13 @@ Renderer.prototype.update = function() {
 
 Renderer.prototype.draw = function(gl) {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    
+
     var viewMatrix = translate(0,0,-100);
-  	var mv = mat4_x_mat4_chain(
-        	viewMatrix,
-        	translate(0,-15,0),
-        	scale(7,7,7),
-        	rotateY(this.objectRotation));
+    var mv = mat4_x_mat4_chain(
+            viewMatrix,
+            translate(0,-15,0),
+            scale(7,7,7),
+            rotateY(this.objectRotation));
     var mvp = mat4_x_mat4(this.perspectiveMatrix, mv);
     var normalMatrix = mat4ToMat3(mv);
     var normalMatrixTranspose = mat3Transpose(normalMatrix);

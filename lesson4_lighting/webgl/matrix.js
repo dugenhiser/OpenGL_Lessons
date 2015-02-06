@@ -1,6 +1,6 @@
 function mat4(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) {
-	return [a, b, c, d,
-			e, f, g, h,
+    return [a, b, c, d,
+            e, f, g, h,
             i, j, k, l,
             m, n, o, p];
 }
@@ -46,7 +46,7 @@ function mat4_x_mat4(m1, m2) {
                 m1[8 ] * m2[1] + m1[9 ] * m2[5] + m1[10] * m2[9 ] + m1[11] * m2[13],
                 m1[8 ] * m2[2] + m1[9 ] * m2[6] + m1[10] * m2[10] + m1[11] * m2[14],
                 m1[8 ] * m2[3] + m1[9 ] * m2[7] + m1[10] * m2[11] + m1[11] * m2[15],
-                
+
                 m1[12] * m2[0] + m1[13] * m2[4] + m1[14] * m2[8 ] + m1[15] * m2[12],
                 m1[12] * m2[1] + m1[13] * m2[5] + m1[14] * m2[9 ] + m1[15] * m2[13],
                 m1[12] * m2[2] + m1[13] * m2[6] + m1[14] * m2[10] + m1[15] * m2[14],
@@ -154,7 +154,7 @@ function lookAt(pos, look, up) {
     x.normalize();
     var y = x.cross(z);
     y.normalize();
-    
+
     var m1 = mat4(x.x, x.y, x.z, 0.0, // i
                   y.x, y.y, y.z, 0.0, // j
                   z.x, z.y, z.z, 0.0, // k

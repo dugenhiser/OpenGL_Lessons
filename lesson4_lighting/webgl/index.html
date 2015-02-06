@@ -1,53 +1,53 @@
 <!DOCTYPE html>
 <html>
-	<head>
+    <head>
         <title>OpenGL Lesson 4 - Lighting</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-        
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+
         <style type="text/css">
         body {
-			margin: 0px auto;
+            margin: 0px auto;
             background-color:rgb(0,0,0);
             color:rgb(255,255,255);
             text-align:center;
             border: 0;
-	        overflow: hidden; /*  Disable scrollbars */
+            overflow: hidden; /*  Disable scrollbars */
             display: block;  /* No floating content on sides */
         }
-		canvas {
-			position:absolute;
-			top:0;
-			left:0;
-			width:100%;
-			height:100%;
-			z-index:-1;
-		}
+        canvas {
+            position:absolute;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            z-index:-1;
+        }
         </style>
 
         <script id="color_v" type="VertexShader">
-			precision mediump float;
-			// Arrays passed in from the CPU
-			attribute vec3 vertex;
-			attribute vec4 color;
-			// Gets interpolated and sent to frag shader
-			varying vec4 varyingColor;
-			// Uniform values stay the same in all shaders
-			uniform mat4 mvp;
-			void main()
-			{
-			    gl_Position = mvp * vec4(vertex, 1.0);
-			    varyingColor = color;
-			}
+            precision mediump float;
+            // Arrays passed in from the CPU
+            attribute vec3 vertex;
+            attribute vec4 color;
+            // Gets interpolated and sent to frag shader
+            varying vec4 varyingColor;
+            // Uniform values stay the same in all shaders
+            uniform mat4 mvp;
+            void main()
+            {
+                gl_Position = mvp * vec4(vertex, 1.0);
+                varyingColor = color;
+            }
         </script>
 
         <script id="color_f" type="FragmentShader">
-			precision mediump float;
-			// Coming from the vertex shader
-			varying vec4 varyingColor;
-			void main()
-			{
-			    gl_FragColor = varyingColor;
-			}
+            precision mediump float;
+            // Coming from the vertex shader
+            varying vec4 varyingColor;
+            void main()
+            {
+                gl_FragColor = varyingColor;
+            }
         </script>
 
         <script id="texture_v" type="VertexShader">
@@ -73,42 +73,42 @@
         </script>
 
         <script id="light_v" type="VertexShader">
-			precision mediump float;
-			attribute vec3 vertex;
-			attribute vec3 normal;
-			varying vec3 varyingVertex;
-			varying vec3 varyingNormal;
-			uniform mat4 mvp;
-			uniform mat3 normalMatrix;
-			void main()
-			{
-			    gl_Position = mvp * vec4(vertex, 1.0);
-            	varyingVertex = vertex;
-			    varyingNormal = normalMatrix * normal;
-			}
-        </script>
-        <script id="light_f" type="FragmentShader">
-        	precision mediump float;
-			varying vec3 varyingVertex;
-			varying vec3 varyingNormal;
+            precision mediump float;
+            attribute vec3 vertex;
+            attribute vec3 normal;
+            varying vec3 varyingVertex;
+            varying vec3 varyingNormal;
+            uniform mat4 mvp;
+            uniform mat3 normalMatrix;
             void main()
             {
-            	vec3 materialColor = vec3(0.5, 0.4, 0.3);
-            	vec3 normal = normalize(varyingNormal);
-				vec3 pointLightPosition = vec3(0,-100,100);
-            	vec3 lightDirection = normalize(pointLightPosition - varyingVertex);
+                gl_Position = mvp * vec4(vertex, 1.0);
+                varyingVertex = vertex;
+                varyingNormal = normalMatrix * normal;
+            }
+        </script>
+        <script id="light_f" type="FragmentShader">
+            precision mediump float;
+            varying vec3 varyingVertex;
+            varying vec3 varyingNormal;
+            void main()
+            {
+                vec3 materialColor = vec3(0.5, 0.4, 0.3);
+                vec3 normal = normalize(varyingNormal);
+                vec3 pointLightPosition = vec3(0,-100,100);
+                vec3 lightDirection = normalize(pointLightPosition - varyingVertex);
 
-            	// start light strength with a little bit of ambient light
-            	float lightStrength = 0.05;
+                // start light strength with a little bit of ambient light
+                float lightStrength = 0.05;
 
-            	// add in diffuse lighting
+                // add in diffuse lighting
                 lightStrength += max(dot(normal, lightDirection), 0.0);
 
                 // add in specular lighting
                 float specularity = 5.0;
-    			vec3 cameraDirection = normalize(varyingVertex);
-    			vec3 reflectionDirection = reflect(lightDirection, normal);
-    			lightStrength += pow(max(dot(reflectionDirection, cameraDirection), 0.0), specularity);
+                vec3 cameraDirection = normalize(varyingVertex);
+                vec3 reflectionDirection = reflect(lightDirection, normal);
+                lightStrength += pow(max(dot(reflectionDirection, cameraDirection), 0.0), specularity);
 
                 // set the final color scaled by the light's strength
                 materialColor *= lightStrength;
@@ -120,39 +120,39 @@
         <script type="text/javascript" src="matrix.js"></script>
         <script type="text/javascript" src="helpers.js"></script>
         <script type="text/javascript">
-			function main() {
-			    var canvas = document.getElementById("canvas");
-			    var gl = canvas.getContext("experimental-webgl");
-			    if (!gl) {
-			    	alert("You're browser does not support WebGL");
-			    	return;
-			    }
+            function main() {
+                var canvas = document.getElementById("canvas");
+                var gl = canvas.getContext("experimental-webgl");
+                if (!gl) {
+                    alert("You're browser does not support WebGL");
+                    return;
+                }
 
-			    canvas.width = window.innerWidth;
-			    canvas.height = window.innerHeight;
-			    var renderer = new Renderer(canvas, gl);
-			    window.onresize = function() {
-				    canvas.width = window.innerWidth;
-				    canvas.height = window.innerHeight;
-			    	renderer.reshape(canvas.width, canvas.height);
-			    };
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                var renderer = new Renderer(canvas, gl);
+                window.onresize = function() {
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                    renderer.reshape(canvas.width, canvas.height);
+                };
 
-			    var renderLoop = function() {
-			    	renderer.update();
-			    	renderer.draw(gl);
-			    };
-			    var animFrame = (window.requestAnimationFrame    || window.webkitRequestAnimationFrame ||
-			                     window.mozRequestAnimationFrame || window.oRequestAnimationFrame      ||
-			                     window.msRequestAnimationFrame  || null);
-			    if (animFrame !== null) {
-			        var recursiveAnim = function() {
-			            renderLoop();
-			            animFrame(recursiveAnim, canvas);
-			        };
-			        animFrame(recursiveAnim, canvas);
-			    }
-			    else setInterval(renderLoop, 1000.0 / 60.0);
-			}
+                var renderLoop = function() {
+                    renderer.update();
+                    renderer.draw(gl);
+                };
+                var animFrame = (window.requestAnimationFrame    || window.webkitRequestAnimationFrame ||
+                                 window.mozRequestAnimationFrame || window.oRequestAnimationFrame      ||
+                                 window.msRequestAnimationFrame  || null);
+                if (animFrame !== null) {
+                    var recursiveAnim = function() {
+                        renderLoop();
+                        animFrame(recursiveAnim, canvas);
+                    };
+                    animFrame(recursiveAnim, canvas);
+                }
+                else setInterval(renderLoop, 1000.0 / 60.0);
+            }
         </script>
     </head>
 

@@ -5,11 +5,11 @@ function Renderer(canvas, gl) {
     this.fieldOfView = 70;
     this.screenSize = new vec2();
     this.reshape(canvas.width, canvas.height);
-    
+
     gl.clearColor(0,0,0,1);
     gl.enable(gl.DEPTH_TEST);
     gl.enable(gl.CULL_FACE);
-    
+
     this.initTextureShader(gl);
     this.initTextureCube(gl);
     this.bindObjectToTextureShader(gl);
@@ -112,14 +112,14 @@ Renderer.prototype.update = function() {
 
 Renderer.prototype.draw = function(gl) {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    
+
     var viewMatrix = translate(0,0,-100);
     var mvp = mat4_x_mat4_chain(
-        	this.perspectiveMatrix,
-        	viewMatrix,
-        	scale(50,50,50),
-        	rotateX(this.objectRotation),
-        	rotateZ(this.objectRotation));
+            this.perspectiveMatrix,
+            viewMatrix,
+            scale(50,50,50),
+            rotateX(this.objectRotation),
+            rotateZ(this.objectRotation));
     var mvpTranspose = mat4Transpose(mvp);
     gl.uniformMatrix4fv(this.mvpID, false, new Float32Array(mvpTranspose));
     gl.drawArrays(gl.TRIANGLES, 0, this.numVertices);

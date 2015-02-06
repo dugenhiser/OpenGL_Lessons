@@ -1,94 +1,94 @@
 <!DOCTYPE html>
 <html>
-	<head>
+    <head>
         <title>OpenGL Lesson 2 - Shaders</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-        
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+
         <style type="text/css">
         body {
-			margin: 0px auto;
+            margin: 0px auto;
             background-color:rgb(0,0,0);
             color:rgb(255,255,255);
             text-align:center;
             border: 0;
-	        overflow: hidden; /*  Disable scrollbars */
+            overflow: hidden; /*  Disable scrollbars */
             display: block;  /* No floating content on sides */
         }
-		canvas {
-			position:absolute;
-			top:0;
-			left:0;
-			width:100%;
-			height:100%;
-			z-index:-1;
-		}
+        canvas {
+            position:absolute;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            z-index:-1;
+        }
         </style>
 
         <script id="color_v" type="VertexShader">
-			// Author: Jordan Reed
-			precision mediump float;
-			// Arrays passed in from the CPU
-			attribute vec3 vertex;
-			attribute vec4 color;
-			// Gets interpolated and sent to frag shader
-			varying vec4 varyingColor;
-			// Uniform values stay the same in all shaders
-			uniform mat4 mvp;
-			void main()
-			{
-			    gl_Position = mvp * vec4(vertex, 1.0);
-			    varyingColor = color;
-			}
+            // Author: Jordan Reed
+            precision mediump float;
+            // Arrays passed in from the CPU
+            attribute vec3 vertex;
+            attribute vec4 color;
+            // Gets interpolated and sent to frag shader
+            varying vec4 varyingColor;
+            // Uniform values stay the same in all shaders
+            uniform mat4 mvp;
+            void main()
+            {
+                gl_Position = mvp * vec4(vertex, 1.0);
+                varyingColor = color;
+            }
         </script>
 
         <script id="color_f" type="FragmentShader">
-        	// Author: Jordan Reed
-			precision mediump float;
-			// Coming from the vertex shader
-			varying vec4 varyingColor;
-			void main()
-			{
-			    gl_FragColor = varyingColor;
-			}
+            // Author: Jordan Reed
+            precision mediump float;
+            // Coming from the vertex shader
+            varying vec4 varyingColor;
+            void main()
+            {
+                gl_FragColor = varyingColor;
+            }
         </script>
 
         <script type="text/javascript" src="renderer.js"></script>
         <script type="text/javascript" src="matrix.js"></script>
         <script type="text/javascript" src="helpers.js"></script>
         <script type="text/javascript">
-			function main() {
-			    var canvas = document.getElementById("canvas");
-			    var gl = canvas.getContext("experimental-webgl");
-			    if (!gl) {
-			    	alert("You're browser does not support WebGL");
-			    	return;
-			    }
+            function main() {
+                var canvas = document.getElementById("canvas");
+                var gl = canvas.getContext("experimental-webgl");
+                if (!gl) {
+                    alert("You're browser does not support WebGL");
+                    return;
+                }
 
-			    canvas.width = window.innerWidth;
-			    canvas.height = window.innerHeight;
-			    var renderer = new Renderer(canvas, gl);
-			    window.onresize = function() {
-				    canvas.width = window.innerWidth;
-				    canvas.height = window.innerHeight;
-			    	renderer.reshape(canvas.width, canvas.height);
-			    };
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                var renderer = new Renderer(canvas, gl);
+                window.onresize = function() {
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                    renderer.reshape(canvas.width, canvas.height);
+                };
 
-			    var renderLoop = function() {
-			    	renderer.update();
-			    	renderer.draw(gl);
-			    };
-			    var animFrame = (window.requestAnimationFrame    || window.webkitRequestAnimationFrame ||
-			                     window.mozRequestAnimationFrame || window.oRequestAnimationFrame      ||
-			                     window.msRequestAnimationFrame  || null);
-			    if (animFrame !== null) {
-			        var recursiveAnim = function() {
-			            renderLoop();
-			            animFrame(recursiveAnim, canvas);
-			        };
-			        animFrame(recursiveAnim, canvas);
-			    }
-			    else setInterval(renderLoop, 1000.0 / 60.0);
-			}
+                var renderLoop = function() {
+                    renderer.update();
+                    renderer.draw(gl);
+                };
+                var animFrame = (window.requestAnimationFrame    || window.webkitRequestAnimationFrame ||
+                                 window.mozRequestAnimationFrame || window.oRequestAnimationFrame      ||
+                                 window.msRequestAnimationFrame  || null);
+                if (animFrame !== null) {
+                    var recursiveAnim = function() {
+                        renderLoop();
+                        animFrame(recursiveAnim, canvas);
+                    };
+                    animFrame(recursiveAnim, canvas);
+                }
+                else setInterval(renderLoop, 1000.0 / 60.0);
+            }
         </script>
     </head>
 
