@@ -1,7 +1,7 @@
 # OpenGL Lessons
 * My website: http://jordanrr.com/opengl
 
-### OpenGL in C#
+### OpenGL in C\#
 OpenTK: http://www.opentk.com
 
 ### Setup OpenGL in C++ with SDL 2.0
