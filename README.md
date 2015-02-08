@@ -1,10 +1,13 @@
 # OpenGL Lessons
 * My website: http://jordanrr.com/opengl
 
+### OpenGL in C#
+OpenTK: http://www.opentk.com
+
 ### Setup OpenGL in C++ with SDL 2.0
-* Windows:
-* Mac:
-* Linux:
+* Windows: https://www.youtube.com/watch?v=e-XIobgbDm0
+* Mac: https://www.youtube.com/watch?v=F0zTjAS3acA
+* Linux: 
 
 ### OpenGL Tutorials
 * OpenGL: http://www.opengl-tutorial.org
