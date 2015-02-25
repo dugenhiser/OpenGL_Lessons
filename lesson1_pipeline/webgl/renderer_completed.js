@@ -12,6 +12,7 @@ function Renderer(canvas, gl) {
     this.initColorShader(gl);
     this.initTriangle(gl);
     this.bindObjectToColorShader(gl);
+    this.objectRotation = 0;
 }
 
 // Load shaders, get attribute locations, and get uniform locations
@@ -30,7 +31,25 @@ Renderer.prototype.initColorShader = function(gl) {
 };
 
 Renderer.prototype.initTriangle = function(gl) {
-    // TODO: make a triangle
+    var vertices = [
+        -.5, -.5, 0,
+         .5, -.5, 0,
+          0,  .5, 0
+    ];
+    var colors = [
+        1,0,0,1,
+        0,1,0,1,
+        0,0,1,1
+    ];
+
+    this.vbo = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.vbo);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+    this.numVertices = vertices.length / 3;
+
+    this.cbo = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.cbo);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
 };
 
 Renderer.prototype.bindObjectToColorShader = function(gl) {
@@ -50,12 +69,24 @@ Renderer.prototype.reshape = function(w, h) {
 };
 
 Renderer.prototype.update = function() {
+    this.objectRotation += .25;
+    if (this.objectRotation > 360)
+        this.objectRotation -= 360;
 };
 
 Renderer.prototype.draw = function(gl) {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    // TODO: draw the triangle we made
+    var viewMatrix = translate(0,0,-100);
+    var mvp = mat4_x_mat4_chain(
+            this.perspectiveMatrix,
+            viewMatrix,
+            scale(50,50,50),
+            rotateX(this.objectRotation),
+            rotateZ(this.objectRotation));
+    var mvpTranspose = mat4Transpose(mvp);
+    gl.uniformMatrix4fv(this.mvpID, false, new Float32Array(mvpTranspose));
+    gl.drawArrays(gl.TRIANGLES, 0, this.numVertices);
 
     gl.flush();
 };
